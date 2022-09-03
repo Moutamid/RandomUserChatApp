@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homes"
+        android:icon="@drawable/ic_home_svgrepo_com__1_"
+        android:iconTint="@color/white"
+        android:title="Home" />
+    <item
+        android:id="@+id/chats"
+        android:icon="@drawable/ic_chats_chat_sms_talk_svgrepo_com"
+        android:iconTint="@color/white"
+        android:title="Chattings" />
+    <item
+        android:id="@+id/groups"
+        android:icon="@drawable/ic_groups_svgrepo_com"
+        android:iconTint="@color/white"
+        android:title="Groups" />
+    <item
+        android:id="@+id/history"
+        android:icon="@drawable/ic_history_svgrepo_com"
+        android:iconTint="@color/white"
+        android:title="History" />
+    <item
+        android:id="@+id/frends"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:iconTint="@color/white"
+        android:title="Friends" />
+</menu>
