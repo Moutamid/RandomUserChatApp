@@ -2,8 +2,13 @@ package com.moutamid.randomchat.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +31,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.moutamid.randomchat.MainActivity;
 import com.moutamid.randomchat.Models.UserModel;
+import com.moutamid.randomchat.PrivacyPolicyScreen;
+import com.moutamid.randomchat.R;
+import com.moutamid.randomchat.TermsAndCondition;
 import com.moutamid.randomchat.databinding.ActivityLoginBinding;
 import com.moutamid.randomchat.utils.Constants;
 
@@ -39,6 +47,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleSignInClient mGoogleSignInClient;
+    private boolean agreed = false;
+    private String termsTxt;
 
     private ActivityLoginBinding b;
 
@@ -55,6 +65,45 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         controller = new RegistrationController(this, b);
+        termsTxt = "By tapping Login and Accept, you acknowledge that you have read the Privacy Policy and agree to the Terms And Conditions.";
+
+        SpannableString ss = new SpannableString(termsTxt);
+
+        ClickableSpan cs1 = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+
+                Intent intent = new Intent(LoginActivity.this, PrivacyPolicyScreen.class);
+                startActivity(intent);
+            }
+        };
+
+
+        ClickableSpan cs2 = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+
+                Intent intent = new Intent(LoginActivity.this, TermsAndCondition.class);
+                startActivity(intent);
+            }
+        };
+        ss.setSpan(cs1,68,82, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(cs2,100,120, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        b.termsPolicy.setText(ss);
+        b.termsPolicy.setMovementMethod(LinkMovementMethod.getInstance());
+        b.agreed.setMovementMethod(LinkMovementMethod.getInstance());
+
+        b.agreed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    agreed = true;
+                }else{
+                    agreed = false;
+                }
+            }
+        });
 
         b.tvSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,24 +112,36 @@ public class LoginActivity extends AppCompatActivity {
                     b.tvName.setVisibility(View.VISIBLE);
                     b.edName.setVisibility(View.VISIBLE);
                     b.radioGroup.setVisibility(View.VISIBLE);
+                    b.langradioGroup.setVisibility(View.VISIBLE);
+                    b.tvlang.setVisibility(View.VISIBLE);
 
-                    b.tvLogin.setText("Login");
+                    b.tvLogin.setText("Sign Up");
                     b.tvSignup.setText("Login");
+                    b.btnLogin.setText("Sign Up");
+                    b.termsCondition.setVisibility(View.GONE);
                     b.textt.setText("Already have an account?");
                     isLogin = false;
                 } else {
                     b.tvName.setVisibility(View.GONE);
                     b.edName.setVisibility(View.GONE);
                     b.radioGroup.setVisibility(View.GONE);
-
-                    b.tvLogin.setText("Sign Up");
+                    b.langradioGroup.setVisibility(View.GONE);
+                    b.tvlang.setVisibility(View.GONE);
+                    b.termsCondition.setVisibility(View.VISIBLE);
+                    b.tvLogin.setText("Login");
                     isLogin = true;
                     b.tvSignup.setText("Sign Up");
+                    b.btnLogin.setText("Login");
                     b.textt.setText("Don't have any account?");
                 }
             }
         });
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
 
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         b.ivGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +160,11 @@ public class LoginActivity extends AppCompatActivity {
                 String emailStr = b.edEmail.getText().toString();
                 String passwordStr = b.edPassword.getText().toString();
 
-                controller.loginUser(emailStr, passwordStr);
+                if(agreed){
+                    controller.loginUser(emailStr, passwordStr);
+                }else {
+                    Toast.makeText(LoginActivity.this, "", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 if (controller.checkEditTextSignUp())
                     return;
@@ -111,14 +176,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("890062472575-05ue90j9694eg6eorj1lhjoknkj3oqja.apps.googleusercontent.com")
-//                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         // [END config_signin]
 
     /*    findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
@@ -225,6 +282,7 @@ public class LoginActivity extends AppCompatActivity {
 
             model.email = user.getEmail();
             model.gender = Constants.GENDER_MALE;
+            model.language = "English";
             model.is_vip = false;
 
             model.uid = user.getUid();

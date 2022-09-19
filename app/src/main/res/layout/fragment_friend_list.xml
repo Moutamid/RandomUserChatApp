@@ -6,19 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".GroupsFragment">
 
-    <TextView
-        android:id="@+id/tvDriverName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/dongle_bold"
-        android:text="Friends"
-        android:textAllCaps="true"
-        android:textColor="@color/verify_color"
-        android:textSize="@dimen/_32ssp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="?actionBarSize"
+        android:orientation="horizontal"
+        android:id="@+id/relative"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+        <TextView
+            android:id="@+id/tvDriverName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dongle_bold"
+            android:text="Friends"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:textAllCaps="true"
+            android:textColor="@color/verify_color"
+            android:textSize="@dimen/_32ssp"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/friend_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_baseline_group_24" />
+    </RelativeLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rec"
@@ -28,5 +47,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDriverName" />
+        app:layout_constraintTop_toBottomOf="@+id/relative" />
 </androidx.constraintlayout.widget.ConstraintLayout>

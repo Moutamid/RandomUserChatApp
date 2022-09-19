@@ -16,6 +16,9 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,11 +27,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.moutamid.randomchat.Adapters.ChatRoomAdapter;
 import com.moutamid.randomchat.Models.Chat;
+import com.moutamid.randomchat.Models.GroupChat;
 import com.moutamid.randomchat.Models.UserModel;
 import com.moutamid.randomchat.databinding.ActivityRandomChatBinding;
 import com.moutamid.randomchat.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +45,7 @@ public class RandomChatActivity extends AppCompatActivity {
     private ChatRoomAdapter adapter;
     private List<Chat> chatList;
     private DatabaseReference db;
+    private String banner = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +63,30 @@ public class RandomChatActivity extends AppCompatActivity {
         b.recyclerView.setLayoutManager(linearLayoutManager);
         b.recyclerView.setHasFixedSize(true);
         b.recyclerView.setNestedScrollingEnabled(false);
-
+        getIds();
         initializeToolbar();
     }
+    private void getIds() {
+        Constants.databaseReference().child("AdmobId").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    banner=snapshot.child("banner").getValue().toString();
+                    AdView adView = new AdView(RandomChatActivity.this);
+                    adView.setAdSize(AdSize.SMART_BANNER);
+                    adView.setAdUnitId(banner);
+                    AdRequest request = new AdRequest.Builder().build();
+                    adView.loadAd(request);
+                    b.adView.addView(adView);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     private void initializeToolbar() {
         Constants.databaseReference()
@@ -147,6 +174,12 @@ public class RandomChatActivity extends AppCompatActivity {
                                 Chat model = ds.getValue(Chat.class);
                                 chatList.add(model);
                             }
+                            Collections.sort(chatList, new Comparator<Chat>() {
+                                @Override
+                                public int compare(Chat chat, Chat t1) {
+                                    return Long.compare(chat.getTimestamp(),t1.getTimestamp());
+                                }
+                            });
                      //       Toast.makeText(RandomChatActivity.this, ""+chatList.size(), Toast.LENGTH_SHORT).show();
                             adapter = new ChatRoomAdapter(RandomChatActivity.this,chatList);
                             b.recyclerView.setAdapter(adapter);

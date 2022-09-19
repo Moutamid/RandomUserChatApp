@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -63,21 +65,17 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.View_Holde
 
         holder.title.setText(currentItem.name);
         holder.bio.setText(currentItem.desc);
-        if (currentItem.getFlag() == 0){
-            Glide.with(context.getApplicationContext())
-                    .asBitmap()
-                    .load(R.drawable.flags)
-                    .apply(new RequestOptions()
-                            .placeholder(lighterGrey)
-                            .error(lighterGrey)
-                    )
-                    .diskCacheStrategy(DiskCacheStrategy.DATA)
-                    .into(holder.img);
-        }else {
-            holder.img.setImageResource(currentItem.getFlag());
-        }
+        Glide.with(context.getApplicationContext())
+                .asBitmap()
+                .load(currentItem.getFlag())
+                .apply(new RequestOptions()
+                        .placeholder(lighterGrey)
+                        .error(lighterGrey)
+                )
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .into(holder.flag);
 
-        if(currentItem.getProfile_url().equals("")){
+     /*   if(currentItem.getProfile_url().equals("")){
 
             Glide.with(context.getApplicationContext())
                     .asBitmap()
@@ -99,12 +97,29 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.View_Holde
                     )
                     .diskCacheStrategy(DiskCacheStrategy.DATA)
                     .into(holder.img);
+        }*/
+        ColorGenerator generator = ColorGenerator.MATERIAL;
+        String test = currentItem.getName();
+        String s = test.substring(0, 1);
+
+        if (Character.isDigit(test.charAt(0))) {
+            TextDrawable drawable = TextDrawable.builder()
+                    .buildRound("#", generator.getRandomColor());
+            holder.img.setImageDrawable(drawable);
+
+            //ivThumbnail.setImageResource(R.drawable.chaticon);
+        } else {
+            TextDrawable drawable = TextDrawable.builder()
+                    .buildRound(s, generator.getRandomColor());
+
+            holder.img.setImageDrawable(drawable);
         }
 
         holder.chatRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context,groupChatsSide.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra(Constants.PARAMS, currentItem.getPush_key());
                 intent.putExtra("groupName", currentItem.getName());
                 holder.itemView.getContext().startActivity(intent);
@@ -120,7 +135,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.View_Holde
 
     class View_Holder extends RecyclerView.ViewHolder {
         TextView title, bio;
-        ImageView img;
+        ImageView img,flag;
         ConstraintLayout chatRow;
 
         public View_Holder(@NonNull View itemView, final GroupsAdapter.OnitemClickListener listener) {
@@ -129,7 +144,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.View_Holde
             bio = (TextView) itemView.findViewById(R.id.tvLastMsg);
             img = itemView.findViewById(R.id.profile_images);
             chatRow = itemView.findViewById(R.id.chat_row_container);
-
+            flag = itemView.findViewById(R.id.imageView6);
         }
 
     }

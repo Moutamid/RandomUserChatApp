@@ -7,14 +7,12 @@ public class GroupsModel {
     public GroupsModel() {
     }
 
-    public GroupsModel(String profile_url, String name, String desc, String push_key,int flag,String lang,String userId) {
+    public GroupsModel(String profile_url, String name, String desc, String push_key,int flag) {
         this.profile_url = profile_url;
         this.name = name;
         this.desc = desc;
         this.push_key = push_key;
         this.flag = flag;
-        this.lang = lang;
-        this.userId = userId;
     }
 
     public String getUserId() {

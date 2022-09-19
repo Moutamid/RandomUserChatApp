@@ -107,6 +107,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.View_Hol
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context,UserProfileFragment.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("id",currentItem.getChatWithId());
                 context.startActivity(intent);
             }

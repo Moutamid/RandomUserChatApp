@@ -54,18 +54,25 @@ dependencies {
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.hbb20:ccp:2.6.0'
-
     // FIREBASE MUST LIBRARY
     implementation platform('com.google.firebase:firebase-bom:27.1.0')
 
     //FIREBASE GOOGLE SIGN IN AUTH
-    implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.android.gms:play-services-auth:20.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.3.0'
+
+    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+    implementation 'com.google.firebase:firebase-auth:21.0.8'
 
     //FIREBASE REALTIME DATABASE
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-storage'
-
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.google.android.gms:play-services-ads:19.7.0'
+    def billing_version = "3.0.0"
+    implementation "com.android.billingclient:billing:$billing_version"
+    
+    implementation 'com.anjlab.android.iab.v3:library:2.0.0'
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     // GLIDE LIBRARY
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'

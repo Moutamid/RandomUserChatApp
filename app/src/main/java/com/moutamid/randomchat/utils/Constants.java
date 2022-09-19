@@ -14,11 +14,15 @@ public class Constants {
 
     public static final String IS_LOGGED_IN = "isloggedin";
     public static final String NULL = "null";
-    public static final String GENDER_MALE = "male";
-    public static final String GENDER_FEMALE = "female";
+    public static final String GENDER_MALE = "Male";
+    public static final String GENDER_FEMALE = "Female";
     public static final String USERS = "users";
     public static final String FILTER_USER = "User";
     public static final String FILTER_VIDEOS = "Videos";
+    public static final String REMOTE_MSG_INVITATION_RESPONSE = "invitationResponse";
+    public static final String REMOTE_MSG_INVITATION_ACCEPTED = "accepted";
+    public static final String REMOTE_MSG_INVITATION_REJECTED = "rejected";
+    public static final String REMOTE_MSG_INVITATION_CANCELLED = "cancelled";
     public static final String CURRENT_USER_MODEL = "currentusermodel";
     public static final String ADMIN = "admin";
     public static final String VIDEO_APPROVAL_REQUEST = "video_approval_requests";

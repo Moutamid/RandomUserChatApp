@@ -1,8 +1,10 @@
 package com.moutamid.randomchat;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -27,18 +29,29 @@ public class HistoryFragment extends Fragment {
     HistoryAdapter adapter;
     FragmentHistoryBinding binding;
     List<Conversation> list;
+    private Context mContext;
 
 
     public HistoryFragment() {
         // Required empty public constructor
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.mContext = MainActivity.context;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding= FragmentHistoryBinding.inflate(getLayoutInflater());
         list=new ArrayList<>();
-        setListData();
-        binding.rec.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        this.mContext = MainActivity.context;
+        if (mContext != null) {
+            setListData();
+            binding.rec.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        }
 
         return  binding.getRoot();
     }
@@ -50,11 +63,12 @@ public class HistoryFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
+
                             for (DataSnapshot ds : snapshot.getChildren()){
                                 Conversation model = ds.getValue(Conversation.class);
                                 list.add(model);
                             }
-                            adapter = new HistoryAdapter(getActivity(), list);
+                            adapter = new HistoryAdapter(mContext, list);
                             binding.rec.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         }

@@ -4,10 +4,15 @@
     package="com.moutamid.randomchat">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".startup.AppCOntext"
@@ -21,38 +26,64 @@
         android:theme="@style/Theme.RandomChat"
         tools:targetApi="31">
         <activity
-            android:name="com.moutamid.randomchat.activity.LoginActivity"
+            android:name=".EditProfile"
+            android:exported="false" />
+        <activity
+            android:name=".PrivacyPolicyScreen"
+            android:exported="false" />
+        <activity
+            android:name=".TermsAndCondition"
+            android:exported="false" />
+        <activity
+            android:name=".VoiceCall.VoiceCallActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VoiceCall.OutgoingCallActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VoiceCall.IncomingCallActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FriendsRequestScreen"
+            android:exported="false" />
+        <activity
+            android:name=".activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.moutamid.randomchat.CreateGroupActivity"
+            android:name=".VipServiceActivity"
             android:exported="false" />
         <activity
-            android:name="com.moutamid.randomchat.VipServiceActivity"
+            android:name=".ChatWithFriendSide"
             android:exported="false" />
         <activity
-            android:name="com.moutamid.randomchat.ChatWithFriendSide"
+            android:name=".groupChatsSide"
             android:exported="false" />
         <activity
-            android:name="com.moutamid.randomchat.groupChatsSide"
+            android:name=".UserProfileFragment"
             android:exported="false" />
         <activity
-            android:name="com.moutamid.randomchat.UserProfileFragment"
+            android:name=".RandomChatActivity"
             android:exported="false" />
         <activity
-            android:name="com.moutamid.randomchat.RandomChatActivity"
+            android:name=".RandomCallActivity"
             android:exported="false" />
         <activity
-            android:name="com.moutamid.randomchat.RandomCallActivity"
-            android:exported="false" />
+            android:name=".MainActivity"
+            android:exported="true" />
         <activity
-            android:name="com.moutamid.randomchat.MainActivity"
-            android:exported="true">
-        </activity>
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id" />
     </application>
 
 </manifest>

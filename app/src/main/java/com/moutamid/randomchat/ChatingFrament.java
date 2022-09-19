@@ -1,12 +1,15 @@
 package com.moutamid.randomchat;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,17 +38,24 @@ public class ChatingFrament extends Fragment {
     private ArrayList<String> connectionList;
     private String gender = "";
     private String lang = "";
+    private Context mContext;
 
     public ChatingFrament() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.mContext = MainActivity.context;
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding=FragmentChatingFramentBinding.inflate(getLayoutInflater());
+        this.mContext = MainActivity.context;
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         connectionList = new ArrayList<>();
@@ -78,7 +88,7 @@ public class ChatingFrament extends Fragment {
     private void checkVipUser() {
         Constants.databaseReference().child(Constants.USERS)
                 .child(user.getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
@@ -115,10 +125,8 @@ public class ChatingFrament extends Fragment {
                                             public void onDataChange(@NonNull DataSnapshot snapshot1) {
                                                 if (snapshot1.exists()){
                                                     UserModel model = snapshot1.getValue(UserModel.class);
-                                                    if (model.getGender().equals(gender)){
+                                                    if (model.getGender().equals(gender) && model.getLanguage().equals(lang)){
                                                         storeRandomChatUser();
-                                                    }else {
-                                                        Toast.makeText(getActivity(), "Connection is not available now", Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
                                             }
@@ -130,8 +138,7 @@ public class ChatingFrament extends Fragment {
                                         });
                             }
                         }else {
-                            Toast.makeText(getActivity(), "Connection is not available now", Toast.LENGTH_SHORT).show();
-
+                           // Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -184,13 +191,21 @@ public class ChatingFrament extends Fragment {
                                     if (!connectionList.contains(id)) {
                                         connectionList.add(id);
                                     }
-                                    Toast.makeText(getActivity(), "" + connectionList.size(), Toast.LENGTH_SHORT).show();
+                                //    Toast.makeText(getActivity(), "" + connectionList.size(), Toast.LENGTH_SHORT).show();
                                     if (connectionList.size() == 1){
-                                        Toast.makeText(getActivity(), "Connection is not available now", Toast.LENGTH_SHORT).show();
+                                        new CountDownTimer(30000, 1000) {
+                                            public void onTick(long millisUntilFinished) {
+
+                                            }
+                                            // When the task is over it will print 00:00:00 there
+                                            public void onFinish() {
+                                                Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }.start();
                                     }
                                     else if (connectionList.size() == 2){
                                         connectionList.clear();
-                                        startActivity(new Intent(requireContext(), RandomChatActivity.class));
+                                        startActivity(new Intent(mContext, RandomChatActivity.class));
                                     }
                                 }
 

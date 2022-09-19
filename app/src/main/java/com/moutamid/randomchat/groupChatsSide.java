@@ -10,9 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,12 +42,16 @@ import com.moutamid.randomchat.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class groupChatsSide extends AppCompatActivity {
     ActivityGroupChatsSideBinding b;
+    private InterstitialAd mInterstitialAd;
 
     String child;
     private String title;
@@ -50,7 +62,7 @@ public class groupChatsSide extends AppCompatActivity {
     private FirebaseUser user;
 
     private List<GroupChat> chatList;
-    private DatabaseReference db;
+    private DatabaseReference db,db1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +75,12 @@ public class groupChatsSide extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         chatList = new ArrayList<>();
-        b.topAppBar.setTitle(title);
+        b.name.setText(title);
+        initRecyclerView();
      //   b.topAppBar.setSubtitle("2 members");
         db = Constants.databaseReference().child("Groups")
-                .child(child)
-                .child(Constants.MESSAGES);
+                .child(child);
+        db1 = Constants.databaseReference().child("AdmobId");
         b.send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,47 +93,129 @@ public class groupChatsSide extends AppCompatActivity {
                 }
             }
         });
+        b.back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(groupChatsSide.this,MainActivity.class));
+            }
+        });
+        getIds();
+        getMembers();
         getMessages();
     }
 
+    private void getIds() {
+        db1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    String id=snapshot.child("interstitial").getValue().toString();
+                    loadAdmobBanner(id);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    private void loadAdmobBanner(String id) {
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(id);
+        AdRequest ad = new AdRequest.Builder().build();
+        mInterstitialAd.loadAd(ad);
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                mInterstitialAd.show();
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+
+                Log.e("ads",String.valueOf(errorCode));
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the interstitial ad is closed.
+            }
+        });
+    }
+
+
+    private void getMembers() {
+        db.child("Members").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    b.total.setText(String.valueOf(snapshot.getChildrenCount()) + " Members");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void sendMessages(String message) {
-        String key = db.push().getKey();
         long timestamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
         GroupChat chat = new GroupChat(message,user.getUid(),timestamp);
-        db.child(user.getUid()).child(String.valueOf(timestamp)).setValue(chat);
+        db.child("Messages").child(String.valueOf(timestamp)).setValue(chat);
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("id",user.getUid());
+        db.child("Members").child(user.getUid()).setValue(hashMap);
         b.message.setText("");
     }
 
     private void getMessages() {
-        db.orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
+        db.child("Messages").orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     chatList.clear();
-                    b.topAppBar.setSubtitle(String.valueOf(snapshot.getChildrenCount()) + " Members");
+                 //   b.topAppBar.setSubtitle(String.valueOf(snapshot.getChildrenCount()) + " Members");
                     for (DataSnapshot ds : snapshot.getChildren()){
-                        db.child(ds.getKey()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot1) {
-                                if(snapshot1.exists()){
-                                    for (DataSnapshot ds1 : snapshot1.getChildren()){
-                                        GroupChat model = ds1.getValue(GroupChat.class);
-                                        chatList.add(model);
-                                    }
-
-                                    initRecyclerView();
-                                    RecyclerViewAdapterMessages adapter = new RecyclerViewAdapterMessages();
-                                    conversationRecyclerView.setAdapter(adapter);
-                                    adapter.notifyDataSetChanged();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
+                        GroupChat model = ds.getValue(GroupChat.class);
+                        chatList.add(model);
                     }
+                    Collections.sort(chatList, new Comparator<GroupChat>() {
+                        @Override
+                        public int compare(GroupChat groupChat, GroupChat t1) {
+                            return Long.compare(groupChat.getTimestamp(),t1.getTimestamp());
+                        }
+                    });
+                    RecyclerViewAdapterMessages adapter = new RecyclerViewAdapterMessages();
+                    conversationRecyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }
             }
 
@@ -144,7 +239,7 @@ public class groupChatsSide extends AppCompatActivity {
         linearLayoutManager.setOrientation(VERTICAL);
         //linearLayoutManager.setReverseLayout(true);
         conversationRecyclerView.setLayoutManager(linearLayoutManager);
-        conversationRecyclerView.setHasFixedSize(true);
+       // conversationRecyclerView.setHasFixedSize(true);
         conversationRecyclerView.setNestedScrollingEnabled(false);
 
 
@@ -201,6 +296,7 @@ public class groupChatsSide extends AppCompatActivity {
                                     .diskCacheStrategy(DATA)
                                     .into(holder.profile);
                         }
+
                     }
                 }
 
@@ -210,6 +306,20 @@ public class groupChatsSide extends AppCompatActivity {
                 }
             });
 
+            if (model.getSenderUid().equals(user.getUid())){
+                holder.profile.setEnabled(false);
+            }else {
+                holder.profile.setEnabled(true);
+            }
+
+            holder.profile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(groupChatsSide.this,UserProfileFragment.class);
+                    intent.putExtra("id",model.getSenderUid());
+                    startActivity(intent);
+                }
+            });
 
         }
 

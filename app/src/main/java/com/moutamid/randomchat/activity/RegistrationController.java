@@ -144,6 +144,19 @@ public class RegistrationController {
                                 activity.model.gender = Constants.GENDER_MALE;
                             else activity.model.gender = Constants.GENDER_FEMALE;
 
+                            if (b.rdEnglish.isChecked())
+                                activity.model.language = "English";
+                            else if (b.rdUrdu.isChecked())
+                                activity.model.language = "Urdu";
+                            else if (b.rdspanish.isChecked())
+                                activity.model.language = "Spanish";
+                            else if (b.rdfrench.isChecked())
+                                activity.model.language = "French";
+                            else if (b.rdgerman.isChecked())
+                                activity.model.language = "German";
+                            else if (b.rditalian.isChecked())
+                                activity.model.language = "Italian";
+
                             activity.model.is_vip = false;
 
                             activity.model.uid = Constants.auth().getUid();

@@ -3,28 +3,50 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/drawable/circle_butt_back.xml" value="0.169" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/drawable/ic_baseline_group_24.xml" value="0.169" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/drawable/ic_gender_svgrepo_com.xml" value="0.169" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/drawable/ic_person.xml" value="0.169" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/drawable/ic_two_friends_svgrepo_com.xml" value="0.169" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/drawable/login_background.xml" value="0.169" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/drawable/menu.xml" value="0.1705" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/drawable/shape_circle.xml" value="0.1705" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_chat_with_friend_side.xml" value="0.14266304347826086" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_create_group.xml" value="0.12092391304347826" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_edit_profile.xml" value="0.12635869565217392" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_friends_request_screen.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_group_chats_side.xml" value="0.12092391304347826" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_incoming_call.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_login.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_outgoing_call.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_privacy_policy_screen.xml" value="0.12454710144927536" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_random_chat.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_terms_and_condition.xml" value="0.12454710144927536" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_vip_purchase_screen.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_vip_service.xml" value="0.14266304347826086" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/activity_voice_call.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/fragment_blank.xml" value="0.12092391304347826" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/fragment_friend_list.xml" value="0.14266304347826086" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/fragment_groups.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/fragment_history.xml" value="0.14266304347826086" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/fragment_home.xml" value="0.14266304347826086" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/friend_list_view.xml" value="0.14266304347826086" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/friend_request_list_view.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/gender_option_dialog.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/groups_items.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/history_item.xml" value="0.14266304347826086" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/item_chat_incoming.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/item_chat_outgoing.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/item_group_chat_incoming.xml" value="0.16666666666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/menu.xml" value="0.12635869565217392" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/message_row.xml" value="0.14" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/message_view.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/send_message_botttom_sheet.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/type_message_area.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/user.xml" value="0.14266304347826086" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/layout/vip_dialog_box.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/menu/app_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/RandomChat_TEST/RandomChat/app/src/main/res/menu/menu_main.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

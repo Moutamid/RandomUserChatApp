@@ -27,6 +27,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -61,10 +64,12 @@ public class RandomCallActivity extends AppCompatActivity {
     List<String> list;
     MessagesAdapter adapter;
     Boolean status = false;
+    private String banner = "";
     private FragmentBlankBinding b;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private DatabaseReference db;
+    private String type = "";
     private static final String LOG_TAG = RandomCallActivity.class.getSimpleName();
 
     private static final int PERMISSION_REQ_ID_RECORD_AUDIO = 22;
@@ -134,12 +139,12 @@ public class RandomCallActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         db = Constants.databaseReference().child("Conversations");
+        getIds();
 
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO, PERMISSION_REQ_ID_RECORD_AUDIO)) {
             initAgoraEngineAndJoinChannel();
             getUserData();
         }
-
 
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(RandomCallActivity.this);
         bottomSheetDialog.setContentView(R.layout.send_message_botttom_sheet);
@@ -181,6 +186,27 @@ public class RandomCallActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+    private void getIds() {
+        Constants.databaseReference().child("AdmobId").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    banner=snapshot.child("banner").getValue().toString();
+                    AdView adView = new AdView(RandomCallActivity.this);
+                    adView.setAdSize(AdSize.SMART_BANNER);
+                    adView.setAdUnitId(banner);
+                    AdRequest request = new AdRequest.Builder().build();
+                    adView.loadAd(request);
+                    b.adView.addView(adView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
@@ -332,14 +358,11 @@ public class RandomCallActivity extends AppCompatActivity {
 
     // Tutorial Step 4
     private void onRemoteUserLeft(int uid, int reason) {
-        showLongToast(String.format(Locale.US, "user %d left %d", (uid & 0xFFFFFFFFL), reason));
-       // View tipMsg = findViewById(R.id.quick_tips_when_use_agora_sdk); // optional UI
-       // tipMsg.setVisibility(View.VISIBLE);
     }
 
     // Tutorial Step 6
     private void onRemoteUserVoiceMuted(int uid, boolean muted) {
-        showLongToast(String.format(Locale.US, "user %d muted or unmuted %b", (uid & 0xFFFFFFFFL), muted));
+
     }
     private void getUserData() {
         Constants.databaseReference()
@@ -365,15 +388,29 @@ public class RandomCallActivity extends AppCompatActivity {
                                                     if (snapshot1.exists()){
                                                         UserModel userModel = snapshot1.getValue(UserModel.class);
                                                         b.UserName.setText(userModel.name);
-                                                        with(getApplicationContext())
-                                                                .asBitmap()
-                                                                .load(userModel.profile_url)
-                                                                .apply(new RequestOptions()
-                                                                        .placeholder(lighterGrey)
-                                                                        .error(lighterGrey)
-                                                                )
-                                                                .diskCacheStrategy(DATA)
-                                                                .into(b.imageView2);
+                                                        if(userModel.getProfile_url().equals("")){
+
+                                                            Glide.with(getApplicationContext())
+                                                                    .asBitmap()
+                                                                    .load(R.drawable.img)
+                                                                    .apply(new RequestOptions()
+                                                                            .placeholder(lighterGrey)
+                                                                            .error(lighterGrey)
+                                                                    )
+                                                                    .diskCacheStrategy(DiskCacheStrategy.DATA)
+                                                                    .into(b.imageView2);
+                                                        }else {
+
+                                                            Glide.with(getApplicationContext())
+                                                                    .asBitmap()
+                                                                    .load(userModel.getProfile_url())
+                                                                    .apply(new RequestOptions()
+                                                                            .placeholder(lighterGrey)
+                                                                            .error(lighterGrey)
+                                                                    )
+                                                                    .diskCacheStrategy(DiskCacheStrategy.DATA)
+                                                                    .into(b.imageView2);
+                                                        }
                                                     }
                                                 }
 

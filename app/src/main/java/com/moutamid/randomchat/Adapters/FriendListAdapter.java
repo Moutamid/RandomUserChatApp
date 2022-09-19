@@ -36,7 +36,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     private FriendListAdapter.OnitemClickListener mListener;
 
     public interface OnitemClickListener {
-        void OnItemClick(int position);//
+        void OnItemClick(int position,View view);//
 
         void onaddclick(int position);
 
@@ -90,7 +90,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
                                 Glide.with(context)
                                         .asBitmap()
-                                        .load(userModel.profile_url)
+                                        .load(userModel.getProfile_url())
                                         .apply(new RequestOptions()
                                                 .placeholder(lighterGrey)
                                                 .error(lighterGrey)
@@ -113,6 +113,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ChatWithFriendSide.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("id",currentItem.getUserId());
                 context.startActivity(intent);
             }
@@ -127,7 +128,8 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
     class View_Holder extends RecyclerView.ViewHolder {
         TextView title, bio;
-        ImageView img;
+        ImageView img,menuImg;
+
         public View_Holder(@NonNull View itemView, final FriendListAdapter.OnitemClickListener listener) {
             super(itemView);
 
@@ -135,11 +137,14 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
 //            bio = (TextView) itemView.findViewById(R.id.tvLastMsg);
             img = itemView.findViewById(R.id.profile_image);
+            menuImg = itemView.findViewById(R.id.menu);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            menuImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    if (mListener != null){
+                        mListener.OnItemClick(getAdapterPosition(),view);
+                    }
                 }
             });
         }
