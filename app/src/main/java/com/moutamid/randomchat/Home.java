@@ -586,7 +586,7 @@ public class Home extends Fragment {
                                     }
                                     else if (connectionList.size() == 2){
                                         connectionList.clear();
-                                        startActivity(new Intent(mContext, RandomCallActivity.class));
+                                        startActivity(new Intent(requireContext(), RandomCallActivity.class));
                                     }
                                 }
 
