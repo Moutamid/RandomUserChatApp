@@ -7,6 +7,7 @@ public class UserModel implements Parcelable {
     public String name, gender, email, uid,language;
 
     public String profile_url;
+    public boolean connection;
 //    public int followers_count, following_count;
 
     public boolean is_vip;
@@ -21,6 +22,7 @@ public class UserModel implements Parcelable {
         uid = in.readString();
         language = in.readString();
         profile_url = in.readString();
+        connection = in.readByte() != 0;
         is_vip = in.readByte() != 0;
     }
 
@@ -92,6 +94,14 @@ public class UserModel implements Parcelable {
         this.is_vip = is_vip;
     }
 
+    public boolean isConnection() {
+        return connection;
+    }
+
+    public void setConnection(boolean connection) {
+        this.connection = connection;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -105,6 +115,7 @@ public class UserModel implements Parcelable {
         parcel.writeString(uid);
         parcel.writeString(language);
         parcel.writeString(profile_url);
+        parcel.writeByte((byte) (connection ? 1 : 0));
         parcel.writeByte((byte) (is_vip ? 1 : 0));
     }
 }

@@ -101,8 +101,8 @@ public class Home extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         connectionList = new ArrayList<>();
-        gender = Stash.getString("gender");
-        lang = Stash.getString("lang");
+        gender = Stash.getString("gender","Male");
+        lang = Stash.getString("lang","English");
         db = Constants.databaseReference().child("AdmobId");
         getIds();
         if (mContext != null) {
@@ -147,6 +147,12 @@ public class Home extends Fragment {
                 b.carLanguage.setVisibility(View.GONE);
             }
         });
+        b.close2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                b.vipCard.setVisibility(View.GONE);
+            }
+        });
 
         b.imgGender.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,11 +168,14 @@ public class Home extends Fragment {
                                     UserModel userModel = snapshot.getValue(UserModel.class);
                                     if (userModel.is_vip){
                                         b.cardGender.setVisibility(View.VISIBLE);
+                                        b.vipCard.setVisibility(View.GONE);
                                     }else {
                                         if (watched){
                                             b.cardGender.setVisibility(View.VISIBLE);
+                                            b.vipCard.setVisibility(View.GONE);
                                         }else {
-                                            showVipPurchase();
+                                            b.vipCard.setVisibility(View.VISIBLE);
+                                            b.cardGender.setVisibility(View.GONE);
                                         }
                                     }
                                     //}
@@ -194,11 +203,14 @@ public class Home extends Fragment {
                                     UserModel userModel = snapshot.getValue(UserModel.class);
                                     if (userModel.is_vip){
                                         b.carLanguage.setVisibility(View.VISIBLE);
+                                        b.vipCard.setVisibility(View.GONE);
                                     }else {
                                         if (watched){
                                             b.carLanguage.setVisibility(View.VISIBLE);
+                                            b.vipCard.setVisibility(View.GONE);
                                         }else {
-                                            showVipPurchase();
+                                            b.vipCard.setVisibility(View.VISIBLE);
+                                            b.carLanguage.setVisibility(View.GONE);
                                         }
                                     }
                                     //}
@@ -274,22 +286,6 @@ public class Home extends Fragment {
                 startActivity(intent);
             }
         });
-     /*   b.upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkPermission();
-                b.menu.setVisibility(View.GONE);
-            }
-        });
-        b.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),UserProfileFragment.class);
-                intent.putExtra("id",user.getUid());
-                startActivity(intent);
-                b.menu.setVisibility(View.GONE);
-            }
-        });*/
         Constants.databaseReference().child(Constants.USERS)
                 .child(user.getUid())
                 .addValueEventListener(new ValueEventListener() {
@@ -314,6 +310,18 @@ public class Home extends Fragment {
 
                     }
                 });
+        b.vip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mContext,VipServiceActivity.class));
+            }
+        });
+        b.ads.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showRewardedVideoAd();
+            }
+        });
         //checkRandomCall();
         return b.getRoot();
     }
@@ -340,7 +348,7 @@ public class Home extends Fragment {
         });
     }
 
-    private void showVipPurchase() {
+   /* private void showVipPurchase() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View add_view = inflater.inflate(R.layout.vip_dialog_box,null);
@@ -364,7 +372,7 @@ public class Home extends Fragment {
         });
         alertDialog.show();
 
-    }
+    }*/
 
     void loadRewardedVideoAd()
     {
@@ -534,6 +542,7 @@ public class Home extends Fragment {
                                         });
                             }
                         }else {
+                            storeRandomChatUser();
                         //    Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -573,23 +582,22 @@ public class Home extends Fragment {
                                     if (!connectionList.contains(id)) {
                                         connectionList.add(id);
                                     }
-                                    if (connectionList.size() == 1){
-                                        new CountDownTimer(30000, 1000) {
-                                            public void onTick(long millisUntilFinished) {
-
-                                            }
-                                            // When the task is over it will print 00:00:00 there
-                                            public void onFinish() {
-                                                Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }.start();
-                                    }
-                                    else if (connectionList.size() == 2){
-                                        connectionList.clear();
-                                        startActivity(new Intent(requireContext(), RandomCallActivity.class));
-                                    }
                                 }
+                            }
+                            if (connectionList.size() == 1){
+                                new CountDownTimer(60000, 1000) {
+                                    public void onTick(long millisUntilFinished) {
 
+                                    }
+                                    // When the task is over it will print 00:00:00 there
+                                    public void onFinish() {
+                                        Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
+                                    }
+                                }.start();
+                            }
+                            else if (connectionList.size() == 2){
+                                connectionList.clear();
+                                startActivity(new Intent(mContext, RandomCallActivity.class));
                             }
                         }
                     }
@@ -611,7 +619,11 @@ public class Home extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        setConnectionFalse();
+//        setConnectionFalse();
+     //   deleteCall();
+    }
+
+    private void deleteCall() {
     }
 
 
@@ -623,14 +635,17 @@ public class Home extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
-                            HashMap<String,Object> hashMap = new HashMap<>();
+                       /*     HashMap<String,Object> hashMap = new HashMap<>();
                             hashMap.put("connection",false);
 
                             Constants.databaseReference()
                                     .child(Constants.RANDOM_CALL)
                                     .child(user.getUid())
-                                    .updateChildren(hashMap);
+                                    .updateChildren(hashMap);*/
 
+                            Constants.databaseReference()
+                                    .child(Constants.RANDOM_CALL)
+                                    .child(user.getUid()).removeValue();
                         }
                     }
 

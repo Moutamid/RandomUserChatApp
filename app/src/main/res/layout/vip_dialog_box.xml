@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="OR"
+            android:visibility="gone"
             android:layout_marginTop="@dimen/_10sdp"
             android:gravity="center"/>
 
@@ -49,6 +50,7 @@
             android:fontFamily="@font/dongle_regular"
             android:text="Watch Ads"
             android:gravity="center"
+            android:visibility="gone"
             android:textColor="@color/white"
             android:textSize="@dimen/_20ssp" />
 

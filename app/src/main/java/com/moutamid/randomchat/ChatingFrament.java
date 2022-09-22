@@ -59,8 +59,8 @@ public class ChatingFrament extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         connectionList = new ArrayList<>();
-        gender = Stash.getString("gender");
-        lang = Stash.getString("lang");
+        gender = Stash.getString("gender","Male");
+        lang = Stash.getString("lang","English");
       //  Toast.makeText(getActivity(),gender,Toast.LENGTH_LONG).show();
         binding.getRoot().setOnTouchListener(new OnSwipeListener(getContext()) {
             @SuppressLint("ClickableViewAccessibility")
@@ -138,6 +138,7 @@ public class ChatingFrament extends Fragment {
                                         });
                             }
                         }else {
+                            storeRandomChatUser();
                            // Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -192,23 +193,23 @@ public class ChatingFrament extends Fragment {
                                         connectionList.add(id);
                                     }
                                 //    Toast.makeText(getActivity(), "" + connectionList.size(), Toast.LENGTH_SHORT).show();
-                                    if (connectionList.size() == 1){
-                                        new CountDownTimer(30000, 1000) {
-                                            public void onTick(long millisUntilFinished) {
-
-                                            }
-                                            // When the task is over it will print 00:00:00 there
-                                            public void onFinish() {
-                                                Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }.start();
-                                    }
-                                    else if (connectionList.size() == 2){
-                                        connectionList.clear();
-                                        startActivity(new Intent(mContext, RandomChatActivity.class));
-                                    }
                                 }
+                            }
 
+                            if (connectionList.size() == 1){
+                                new CountDownTimer(60000, 1000) {
+                                    public void onTick(long millisUntilFinished) {
+
+                                    }
+                                    // When the task is over it will print 00:00:00 there
+                                    public void onFinish() {
+                                        Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
+                                    }
+                                }.start();
+                            }
+                            else if (connectionList.size() == 2){
+                                connectionList.clear();
+                                startActivity(new Intent(mContext, RandomChatActivity.class));
                             }
                         }
                     }
@@ -230,7 +231,7 @@ public class ChatingFrament extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        setConnectionFalse();
+//        setConnectionFalse();
     }
 
 

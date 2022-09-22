@@ -16,6 +16,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.fxn.stash.Stash;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -46,6 +47,7 @@ public class RandomChatActivity extends AppCompatActivity {
     private List<Chat> chatList;
     private DatabaseReference db;
     private String banner = "";
+    private String otherKey = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class RandomChatActivity extends AppCompatActivity {
         user = mAuth.getCurrentUser();
         chatList = new ArrayList<>();
         db = Constants.databaseReference().child(Constants.MESSAGES);
+        otherKey = Stash.getString("chat_key","");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(VERTICAL);
         //linearLayoutManager.setReverseLayout(true);
@@ -64,6 +67,7 @@ public class RandomChatActivity extends AppCompatActivity {
         b.recyclerView.setHasFixedSize(true);
         b.recyclerView.setNestedScrollingEnabled(false);
         getIds();
+        checkCalling();
         initializeToolbar();
     }
     private void getIds() {
@@ -102,7 +106,7 @@ public class RandomChatActivity extends AppCompatActivity {
                                 String idFrom = dataSnapshot.getKey().toString();
                                 // Toast.makeText(RandomCallActivity.this,dataSnapshot.getKey().toString(),Toast.LENGTH_LONG).show();
                                 if (!idFrom.equals(user.getUid())) {
-
+                                    Stash.put("chat_key",idFrom);
                                     Constants.databaseReference()
                                             .child(Constants.USERS)
                                             .child(idFrom)
@@ -193,18 +197,30 @@ public class RandomChatActivity extends AppCompatActivity {
                     }
                 });
     }
+    private void checkCalling() {
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        removeUser();
+        Constants.databaseReference()
+                .child(Constants.RANDOM_CHAT).child(user.getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (!snapshot.exists()){
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         removeUser();
-        sendMainActivity();
+        finish();
+       // sendMainActivity();
     }
 
     private void sendMainActivity() {
@@ -216,6 +232,10 @@ public class RandomChatActivity extends AppCompatActivity {
         Constants.databaseReference()
                 .child(Constants.RANDOM_CHAT)
                 .child(user.getUid())
+                .removeValue();
+        Constants.databaseReference()
+                .child(Constants.RANDOM_CHAT)
+                .child(otherKey)
                 .removeValue();
     }
 

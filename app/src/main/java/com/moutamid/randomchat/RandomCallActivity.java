@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.fxn.stash.Stash;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -70,6 +71,7 @@ public class RandomCallActivity extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference db;
     private String type = "";
+    private String otherKey = "";
     private static final String LOG_TAG = RandomCallActivity.class.getSimpleName();
 
     private static final int PERMISSION_REQ_ID_RECORD_AUDIO = 22;
@@ -140,12 +142,12 @@ public class RandomCallActivity extends AppCompatActivity {
         user = mAuth.getCurrentUser();
         db = Constants.databaseReference().child("Conversations");
         getIds();
-
+        otherKey = Stash.getString("call_key","");
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO, PERMISSION_REQ_ID_RECORD_AUDIO)) {
             initAgoraEngineAndJoinChannel();
             getUserData();
         }
-
+        checkCalling();
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(RandomCallActivity.this);
         bottomSheetDialog.setContentView(R.layout.send_message_botttom_sheet);
         EditText message = bottomSheetDialog.findViewById(R.id.edit_gchat_message);
@@ -278,9 +280,6 @@ public class RandomCallActivity extends AppCompatActivity {
     // Tutorial Step 3
     public void onEncCallClicked(View view) {
         leaveChannel();
-        //RtcEngine.destroy();
-        //mRtcEngine = null;
-        finish();
     }
 
     // Tutorial Step 1
@@ -346,16 +345,6 @@ public class RandomCallActivity extends AppCompatActivity {
         return "";
     }
 
-
-    // Tutorial Step 3
-    private void leaveChannel() {
-        mRtcEngine.leaveChannel();
-        Constants.databaseReference()
-                .child(Constants.RANDOM_CALL)
-                .child(user.getUid())
-                .removeValue();
-    }
-
     // Tutorial Step 4
     private void onRemoteUserLeft(int uid, int reason) {
     }
@@ -378,7 +367,7 @@ public class RandomCallActivity extends AppCompatActivity {
                                 String key = dataSnapshot.getKey().toString();
                                 // Toast.makeText(RandomCallActivity.this,dataSnapshot.getKey().toString(),Toast.LENGTH_LONG).show();
                                 if (!key.equals(user.getUid())) {
-
+                                    Stash.put("call_key",key);
                                     Constants.databaseReference()
                                             .child(Constants.USERS)
                                             .child(key)
@@ -444,27 +433,54 @@ public class RandomCallActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
-        leaveChannel();
-        RtcEngine.destroy();
-        mRtcEngine = null;
+    private void checkCalling() {
+
+        Constants.databaseReference()
+                .child(Constants.RANDOM_CALL).child(user.getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (!snapshot.exists()){
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+
+    private void removeUser() {
         Constants.databaseReference()
                 .child(Constants.RANDOM_CALL)
                 .child(user.getUid())
                 .removeValue();
+        Constants.databaseReference()
+                .child(Constants.RANDOM_CALL)
+                .child(otherKey)
+                .removeValue();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        leaveChannel();
-        sendMainActivity();
-    }
     private void sendMainActivity() {
         startActivity(new Intent(RandomCallActivity.this,MainActivity.class));
         finish();
+    }
+
+    // Tutorial Step 3
+    private void leaveChannel() {
+        mRtcEngine.leaveChannel();
+        removeUser();
+        finish();
+        //sendMainActivity();
+//        mRtcEngine = null;
     }
 
 }
