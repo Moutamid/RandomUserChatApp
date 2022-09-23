@@ -315,7 +315,7 @@ public class VoiceCallActivity extends AppCompatActivity {
     private void endCall() {
         DatabaseReference db = Constants.databaseReference().child("VoiceCall");
         db.child(user.getUid()).removeValue();
-      //  db.child(model.getUid()).removeValue();
+        db.child(model.getUid()).removeValue();
         finish();
     }
 

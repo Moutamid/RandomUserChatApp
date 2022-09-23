@@ -1,6 +1,7 @@
 package com.moutamid.randomchat;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.fxn.stash.Stash;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +41,7 @@ public class ChatingFrament extends Fragment {
     private String gender = "";
     private String lang = "";
     private Context mContext;
+    private ProgressDialog dialog;
 
     public ChatingFrament() {
         // Required empty public constructor
@@ -61,7 +64,10 @@ public class ChatingFrament extends Fragment {
         connectionList = new ArrayList<>();
         gender = Stash.getString("gender","Male");
         lang = Stash.getString("lang","English");
-      //  Toast.makeText(getActivity(),gender,Toast.LENGTH_LONG).show();
+     //   if (mContext != null) {
+            dialog = new ProgressDialog(getActivity());
+       // }
+
         binding.getRoot().setOnTouchListener(new OnSwipeListener(getContext()) {
             @SuppressLint("ClickableViewAccessibility")
             public void onSwipeTop() {
@@ -195,8 +201,9 @@ public class ChatingFrament extends Fragment {
                                 //    Toast.makeText(getActivity(), "" + connectionList.size(), Toast.LENGTH_SHORT).show();
                                 }
                             }
-
-                            if (connectionList.size() == 1){
+                            dialog.setMessage("Finding Connection....");
+                            dialog.show();
+                            /*if (connectionList.size() == 1){
                                 new CountDownTimer(60000, 1000) {
                                     public void onTick(long millisUntilFinished) {
 
@@ -210,7 +217,22 @@ public class ChatingFrament extends Fragment {
                             else if (connectionList.size() == 2){
                                 connectionList.clear();
                                 startActivity(new Intent(mContext, RandomChatActivity.class));
-                            }
+                            }*/
+                            new CountDownTimer(30000, 1000) {
+                                public void onTick(long millisUntilFinished) {
+                                    if (connectionList.size() == 2){
+                                        connectionList.clear();
+                                        startActivity(new Intent(mContext, RandomChatActivity.class));
+                                        dialog.dismiss();
+                                    }
+                                }
+                                // When the task is over it will print 00:00:00 there
+                                public void onFinish() {
+                                    dialog.dismiss();
+                                    Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
+                                }
+                            }.start();
+
                         }
                     }
 

@@ -205,7 +205,8 @@ public class RandomChatActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (!snapshot.exists()){
-                            finish();
+                            // finish();
+                            sendMainActivity();
                         }
                     }
 
@@ -219,8 +220,8 @@ public class RandomChatActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         removeUser();
-        finish();
-       // sendMainActivity();
+        //finish();
+        sendMainActivity();
     }
 
     private void sendMainActivity() {

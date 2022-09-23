@@ -446,7 +446,7 @@ public class RandomCallActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (!snapshot.exists()){
-                            finish();
+                            sendMainActivity();
                         }
                     }
 
@@ -469,18 +469,19 @@ public class RandomCallActivity extends AppCompatActivity {
                 .removeValue();
     }
 
-    private void sendMainActivity() {
-        startActivity(new Intent(RandomCallActivity.this,MainActivity.class));
-        finish();
-    }
-
     // Tutorial Step 3
     private void leaveChannel() {
         mRtcEngine.leaveChannel();
         removeUser();
-        finish();
+        sendMainActivity();
         //sendMainActivity();
 //        mRtcEngine = null;
+    }
+
+
+    private void sendMainActivity() {
+        startActivity(new Intent(RandomCallActivity.this,MainActivity.class));
+        finish();
     }
 
 }

@@ -80,6 +80,7 @@ public class Home extends Fragment {
     private DatabaseReference db;
     private Context mContext;
     private boolean watched = false;
+    private ProgressDialog dialog;
 
 
     public Home() {
@@ -108,6 +109,7 @@ public class Home extends Fragment {
         if (mContext != null) {
             MobileAds.initialize(mContext, getString(R.string.admob_app_id));
         }
+        dialog = new ProgressDialog(getActivity());
         // loading Video Ad
         loadRewardedVideoAd();
         getUserDetail();
@@ -584,7 +586,9 @@ public class Home extends Fragment {
                                     }
                                 }
                             }
-                            if (connectionList.size() == 1){
+                            dialog.setMessage("Finding Connection....");
+                            dialog.show();
+                          /*  if (connectionList.size() == 1){
                                 new CountDownTimer(60000, 1000) {
                                     public void onTick(long millisUntilFinished) {
 
@@ -594,11 +598,22 @@ public class Home extends Fragment {
                                         Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
                                     }
                                 }.start();
-                            }
-                            else if (connectionList.size() == 2){
-                                connectionList.clear();
-                                startActivity(new Intent(mContext, RandomCallActivity.class));
-                            }
+                            }*/
+                            new CountDownTimer(30000, 1000) {
+                                public void onTick(long millisUntilFinished) {
+                                    if (connectionList.size() == 2){
+                                        connectionList.clear();
+                                        startActivity(new Intent(mContext, RandomCallActivity.class));
+                                        dialog.dismiss();
+                                    }
+                                }
+                                // When the task is over it will print 00:00:00 there
+                                public void onFinish() {
+                                    dialog.dismiss();
+                                    Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
+                                }
+                            }.start();
+
                         }
                     }
 
