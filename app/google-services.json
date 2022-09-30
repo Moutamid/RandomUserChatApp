@@ -8,6 +8,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:569438679689:android:e3e6e71dd39a6e02798c58",
+        "android_client_info": {
+          "package_name": "com.moutamid.adminrandomchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569438679689-hbrh793n35eqfdou8bdib080gn9kpqi6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMuBmQg4FqO_0pptIc7UeK89tmZx5Ys9Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569438679689-hbrh793n35eqfdou8bdib080gn9kpqi6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:569438679689:android:776fa2c8a0f9ed95798c58",
         "android_client_info": {
           "package_name": "com.moutamid.randomchat"
@@ -15,11 +44,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "569438679689-1aclrsubklfrbca7fmi1mb4a0rumljib.apps.googleusercontent.com",
+          "client_id": "569438679689-56elifhlferimlu4hk9csopcl7kspoar.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.moutamid.randomchat",
-            "certificate_hash": "309bc07aea5fffbbbf69c8b8435d380078ec8eba"
+            "certificate_hash": "f39a3ca243502e996f2be8d87b2ec0391f576d60"
           }
         },
         {

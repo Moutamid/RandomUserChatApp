@@ -72,6 +72,9 @@ public class ChatingFrament extends Fragment {
             @SuppressLint("ClickableViewAccessibility")
             public void onSwipeTop() {
                 checkVipUser();
+
+                dialog.setMessage("Finding Connection....");
+                dialog.show();
              //   startActivity(new Intent(requireContext(), RandomChatActivity.class));
             }
             @SuppressLint("ClickableViewAccessibility")
@@ -201,8 +204,6 @@ public class ChatingFrament extends Fragment {
                                 //    Toast.makeText(getActivity(), "" + connectionList.size(), Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            dialog.setMessage("Finding Connection....");
-                            dialog.show();
                             /*if (connectionList.size() == 1){
                                 new CountDownTimer(60000, 1000) {
                                     public void onTick(long millisUntilFinished) {
@@ -220,6 +221,7 @@ public class ChatingFrament extends Fragment {
                             }*/
                             new CountDownTimer(30000, 1000) {
                                 public void onTick(long millisUntilFinished) {
+
                                     if (connectionList.size() == 2){
                                         connectionList.clear();
                                         startActivity(new Intent(mContext, RandomChatActivity.class));
@@ -229,6 +231,8 @@ public class ChatingFrament extends Fragment {
                                 // When the task is over it will print 00:00:00 there
                                 public void onFinish() {
                                     dialog.dismiss();
+                                    connectionList.clear();
+                                    setConnectionFalse();
                                     Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
                                 }
                             }.start();
@@ -253,7 +257,7 @@ public class ChatingFrament extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        setConnectionFalse();
+        setConnectionFalse();
     }
 
 

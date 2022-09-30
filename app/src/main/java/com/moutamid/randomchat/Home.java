@@ -119,6 +119,9 @@ public class Home extends Fragment {
             public void onSwipeTop() {
             //    storeRandomChatUser();
                 checkVipUser();
+
+                dialog.setMessage("Finding Connection....");
+                dialog.show();
             }
 
             @SuppressLint("ClickableViewAccessibility")
@@ -609,8 +612,10 @@ public class Home extends Fragment {
                                 }
                                 // When the task is over it will print 00:00:00 there
                                 public void onFinish() {
-                                    dialog.dismiss();
+                                    setConnectionFalse();
+                                    connectionList.clear();
                                     Toast.makeText(mContext, "Connection is not available now", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
                                 }
                             }.start();
 
@@ -634,7 +639,7 @@ public class Home extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        setConnectionFalse();
+        setConnectionFalse();
      //   deleteCall();
     }
 
@@ -650,17 +655,14 @@ public class Home extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
-                       /*     HashMap<String,Object> hashMap = new HashMap<>();
+                            HashMap<String,Object> hashMap = new HashMap<>();
                             hashMap.put("connection",false);
 
                             Constants.databaseReference()
                                     .child(Constants.RANDOM_CALL)
                                     .child(user.getUid())
-                                    .updateChildren(hashMap);*/
+                                    .updateChildren(hashMap);
 
-                            Constants.databaseReference()
-                                    .child(Constants.RANDOM_CALL)
-                                    .child(user.getUid()).removeValue();
                         }
                     }
 
