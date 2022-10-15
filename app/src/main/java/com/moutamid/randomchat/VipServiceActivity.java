@@ -25,7 +25,8 @@ import java.util.HashMap;
 public class VipServiceActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
     BillingProcessor bp;
-    public static final String LICENSE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrpGtYDbov4k2klc+GDzkTQPszy82XbwooD4Z+rLsb6zKbhrMNXrti2evpD1L9tTLTDl676Aorj79AhsC0bI2cz0bTDyuQ3slr48DOCTuIV/VTPzSmu9taZJjwhr1+WkP5VlE+BQCXsIBavnQ/i2Y650RGtZlyr/Nz7MBu6iPEUCrFyutJkShnb5ISmY+2I5gLSRFSGEYogZRUY+o109X7IbrBXrnciZK6DEXHlx0JJF9O+MxAHOc4QdSvTcYvlx5a/I9SHyuet6tcafblPmyJnVcNlKn8a/ckcIOXY7i7w4PCwZbHyQ3O/t1BwFaC+XpwSUdZM1KBnuCFu+9jrAOQIDAQAB";
+//    public static final String LICENSE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsrpGtYDbov4k2klc+GDzkTQPszy82XbwooD4Z+rLsb6zKbhrMNXrti2evpD1L9tTLTDl676Aorj79AhsC0bI2cz0bTDyuQ3slr48DOCTuIV/VTPzSmu9taZJjwhr1+WkP5VlE+BQCXsIBavnQ/i2Y650RGtZlyr/Nz7MBu6iPEUCrFyutJkShnb5ISmY+2I5gLSRFSGEYogZRUY+o109X7IbrBXrnciZK6DEXHlx0JJF9O+MxAHOc4QdSvTcYvlx5a/I9SHyuet6tcafblPmyJnVcNlKn8a/ckcIOXY7i7w4PCwZbHyQ3O/t1BwFaC+XpwSUdZM1KBnuCFu+9jrAOQIDAQAB";
+    public static final String LICENSE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3iwKMl2X26J7j+CZDgB1/LYg4z5aCPurK3m9MQvjLPm1z3FrITt88tIr0ad1m6cyGcFIZ+6zyM6J1iIit9cbFgd+in+3JD9On5hc5QcXYGt61kYZr+WTpIUT7cFzfYIGOTTf5zW75IMvlczUylj+UCkuNiH2ZQlrPxXyIdqvz4pENJav4YGJzkkh6TPj6/6skaLpabq/HrVuv35qTEfDDgH6XAziWEv+L8DC8py7uRahA65+nDyiY/SuOlvCs4BqNSGSkVsqPIPFXPbWFP/Hs/YNs/Y3a/sSOpaBaBiwMpa1broAQvPtYKpOwAneIAJ+QtqOcdCcDtkvyFIOaaNeOQIDAQAB";
     public static final String ONE_MONTH_DOLLAR_PRODUCT = "one.month.com.moutamid.randomchat";
     public static final String THREE_MONTH_DOLLAR_PRODUCT = "three.month.com.moutamid.randomchat";
     public static final String ONE_YEAR_DOLLAR_PRODUCT = "one.year.com.moutamid.randomchat";
